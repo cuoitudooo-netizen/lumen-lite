@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Lumen Lite — Flashcards</title>
+  <meta name="description" content="An offline spaced-repetition flashcard desk for students. No account. Your cards stay on this device.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-theme="parchment">
+  <a class="skip" href="#app">Skip to cards</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="top">
+    <div class="brand">
+      <img src="assets/favicon.svg" alt="" width="28" height="28">
+      <span>Lumen</span>
+    </div>
+    <div class="hello">
+      <p class="greet" id="greet">Good day</p>
+      <p class="date" id="today-date"></p>
+      <button type="button" class="text-btn" id="clear-demo" hidden>Clear demo data</button>
+    </div>
+    <div class="top-actions">
+      <div class="theme-switch" role="group" aria-label="Color theme">
+        <button type="button" class="swatch" data-theme-btn="parchment" title="Parchment theme" aria-label="Parchment theme"></button>
+        <button type="button" class="swatch" data-theme-btn="nocturne" title="Nocturne theme" aria-label="Nocturne theme"></button>
+        <button type="button" class="swatch" data-theme-btn="river" title="River theme" aria-label="River theme"></button>
+      </div>
+      <button type="button" class="icon-btn" id="open-settings" aria-label="Open settings">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68 1.65 1.65 0 0 0 10 3.17V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="app">
+    <section class="view" id="view-library">
+      <div class="stats" id="stats" aria-label="Today’s study summary"></div>
+      <div class="desk">
+        <section class="card decks-card" aria-labelledby="decks-heading">
+          <div class="card-head">
+            <h2 id="decks-heading">Your decks</h2>
+            <button type="button" class="text-btn" id="add-deck">New deck</button>
+          </div>
+          <div class="deck-grid" id="deck-grid"></div>
+          <p class="empty-hint" id="deck-empty" hidden>Add a deck to start a set of cards. Lumen keeps everything on this device only.</p>
+          <div class="study-all-wrap" id="study-all-wrap" hidden>
+            <button type="button" class="btn-primary" id="study-all">Study all due cards</button>
+          </div>
+        </section>
+
+        <section class="card side-card" aria-labelledby="week-heading">
+          <h2 id="week-heading">Last 7 days</h2>
+          <div class="bars" id="week-bars" role="img" aria-label="Reviews completed each of the last seven days"></div>
+          <div class="heatmap-wrap" id="heatmap-wrap">
+            <h3 class="subhead">Last 12 weeks</h3>
+            <div class="heatmap" id="heatmap"></div>
+          </div>
+          <h3 class="subhead">Coming up</h3>
+          <ul class="upcoming" id="upcoming"></ul>
+        </section>
+      </div>
+    </section>
+
+    <section class="view" id="view-study" hidden>
+      <div class="study-shell">
+        <div class="study-head">
+          <button type="button" class="btn-ghost" id="leave-study">Back</button>
+          <div class="study-meta">
+            <p class="study-deck" id="study-deck">Deck</p>
+            <p class="study-progress" id="study-progress">0 of 0</p>
+          </div>
+          <button type="button" class="text-btn" id="undo-review" hidden>Undo</button>
+        </div>
+
+        <div id="study-active">
+          <div class="stage">
+            <button type="button" class="flash" id="flash" aria-live="polite">
+              <span class="face front">
+                <span class="face-kicker" id="front-kicker">Question</span>
+                <span class="face-text" id="front-text"></span>
+                <span class="face-hint" id="front-hint"></span>
+                <span class="face-prompt" id="flip-prompt">Click or press Space to flip</span>
+              </span>
+              <span class="face back">
+                <span class="face-kicker">Answer</span>
+                <span class="face-text" id="back-text"></span>
+              </span>
+            </button>
+          </div>
+          <div class="ratings" id="ratings" hidden>
+            <p class="ratings-label">How well did you remember it?</p>
+            <div class="rating-row">
+              <button type="button" class="rate rate-again" data-rate="again"><span class="rate-name">Again</span><span class="rate-when" data-when="again">10m</span></button>
+              <button type="button" class="rate rate-hard" data-rate="hard"><span class="rate-name">Hard</span><span class="rate-when" data-when="hard">1d</span></button>
+              <button type="button" class="rate rate-good" data-rate="good"><span class="rate-name">Good</span><span class="rate-when" data-when="good">3d</span></button>
+              <button type="button" class="rate rate-easy" data-rate="easy"><span class="rate-name">Easy</span><span class="rate-when" data-when="easy">4d</span></button>
+            </div>
+            <p class="kbd-hint">Press <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to rate, <kbd>U</kbd> to undo.</p>
+          </div>
+          <div class="cram-actions" id="cram-actions" hidden>
+            <button type="button" class="btn-primary" id="cram-next">Next card</button>
+            <p class="kbd-hint">Cram mode does not change your review schedule. Press <kbd>Space</kbd> or <kbd>3</kbd> for the next card.</p>
+          </div>
+          <div class="study-tools">
+            <button type="button" class="text-btn" id="edit-current">Edit card</button>
+          </div>
+        </div>
+
+        <div class="summary card" id="study-summary" hidden>
+          <h2>Session complete</h2>
+          <p class="summary-lead" id="summary-lead"></p>
+          <ul class="summary-stats" id="summary-stats"></ul>
+          <div class="settings-actions">
+            <button type="button" class="btn-primary" id="summary-done">Back to decks</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-browse" hidden>
+      <div class="browse-shell">
+        <div class="study-head">
+          <button type="button" class="btn-ghost" id="leave-browse">Back</button>
+          <div class="study-meta">
+            <p class="study-deck" id="browse-deck">Deck</p>
+            <p class="study-progress" id="browse-count"></p>
+          </div>
+          <button type="button" class="btn-primary" id="browse-add">Add card</button>
+        </div>
+        <div class="card browse-card">
+          <div class="browse-tools">
+            <input type="search" id="card-search" maxlength="80" placeholder="Search cards" aria-label="Search cards" autocomplete="off">
+            <button type="button" class="btn-ghost pro-only" id="cram-deck">Cram all</button>
+          </div>
+          <ul class="card-list" id="card-list"></ul>
+          <p class="empty-hint" id="card-empty" hidden>No cards in this deck yet. Add one to start studying.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Lumen Lite · Your cards stay in this browser. <button type="button" class="text-btn" id="open-settings-foot">Settings</button></p>
+    <p class="lite-credit">Made with Lumen Lite. Get the full desk — three themes, unlimited decks and cards, a 12-week heatmap, cram mode, and JSON/CSV backup — at <a href="https://cuoitudo.gumroad.com">cuoitudo.gumroad.com</a>.</p>
+  </footer>
+
+  <div class="modal" id="settings-modal" hidden>
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="card-head">
+        <h2 id="settings-title">Settings</h2>
+        <button type="button" class="icon-btn" data-close-modal aria-label="Close settings">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <form id="settings-form">
+        <label class="field">
+          <span>What should Lumen call you?</span>
+          <input type="text" id="set-name" maxlength="40" placeholder="Your first name" autocomplete="nickname">
+        </label>
+        <label class="field pro-only" id="new-per-day-field">
+          <span>New cards per day</span>
+          <input type="number" id="set-new" min="1" max="200" required>
+        </label>
+        <div class="settings-actions">
+          <button type="submit" class="btn-primary">Save settings</button>
+        </div>
+      </form>
+      <div class="backup" id="backup">
+        <h3 class="subhead">Backup</h3>
+        <p class="muted">Export a JSON file to move your decks to another browser, or keep a copy. Nothing is uploaded anywhere. You can also import a CSV of cards (front, back, optional hint).</p>
+        <div class="backup-actions">
+          <button type="button" class="btn-ghost" id="export-data">Export JSON</button>
+          <label class="btn-ghost file-btn">Import JSON
+            <input type="file" id="import-data" accept="application/json,.json">
+          </label>
+          <label class="btn-ghost file-btn">Import CSV
+            <input type="file" id="import-csv" accept="text/csv,.csv">
+          </label>
+          <button type="button" class="btn-danger" id="reset-data">Reset all data</button>
+        </div>
+        <p class="form-msg" id="settings-msg" role="status"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="deck-modal" hidden>
+    <div class="modal-backdrop" data-close-deck></div>
+    <div class="modal-card modal-narrow" role="dialog" aria-modal="true" aria-labelledby="deck-title">
+      <div class="card-head">
+        <h2 id="deck-title">New deck</h2>
+        <button type="button" class="icon-btn" data-close-deck aria-label="Close">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <form id="deck-form" autocomplete="off">
+        <input type="hidden" id="deck-id">
+        <label class="field">
+          <span>Deck name</span>
+          <input type="text" id="deck-name" maxlength="48" required placeholder="e.g. Cell Biology">
+        </label>
+        <fieldset class="colors">
+          <legend>Color</legend>
+          <label><input type="radio" name="deck-color" value="copper" checked> <span class="dot copper"></span></label>
+          <label><input type="radio" name="deck-color" value="moss"> <span class="dot moss"></span></label>
+          <label><input type="radio" name="deck-color" value="slate"> <span class="dot slate"></span></label>
+          <label><input type="radio" name="deck-color" value="amber"> <span class="dot amber"></span></label>
+          <label><input type="radio" name="deck-color" value="plum"> <span class="dot plum"></span></label>
+        </fieldset>
+        <div class="settings-actions">
+          <button type="submit" class="btn-primary">Save deck</button>
+          <button type="button" class="btn-danger" id="delete-deck" hidden>Delete deck</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="card-modal" hidden>
+    <div class="modal-backdrop" data-close-card></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="card-title">
+      <div class="card-head">
+        <h2 id="card-title">New card</h2>
+        <button type="button" class="icon-btn" data-close-card aria-label="Close">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <form id="card-form" autocomplete="off">
+        <input type="hidden" id="card-id">
+        <input type="hidden" id="card-deck">
+        <label class="field">
+          <span>Front (the prompt)</span>
+          <textarea id="card-front" rows="3" maxlength="500" required placeholder="e.g. What is osmosis?"></textarea>
+        </label>
+        <label class="field">
+          <span>Back (the answer)</span>
+          <textarea id="card-back" rows="4" maxlength="800" required placeholder="A short answer you can recall out loud"></textarea>
+        </label>
+        <label class="field">
+          <span>Hint (optional)</span>
+          <input type="text" id="card-hint" maxlength="120" placeholder="A small nudge, shown on the front">
+        </label>
+        <div class="settings-actions">
+          <button type="submit" class="btn-primary" id="card-save">Save card</button>
+          <button type="submit" class="btn-ghost" id="card-save-next" name="addAnother" value="1">Save &amp; add another</button>
+          <button type="button" class="btn-danger" id="delete-card" hidden>Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <noscript>
+    <p class="noscript">Lumen needs JavaScript turned on in your browser. Nothing is sent to a server — it only runs on this page.</p>
+  </noscript>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

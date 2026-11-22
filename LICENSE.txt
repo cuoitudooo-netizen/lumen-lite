@@ -1,0 +1,17 @@
+Lumen Lite — Offline Flashcards
+Copyright (c) 2026 Cuoitudo (cuoitudo.gumroad.com)
+
+FREE PERSONAL LICENSE (Lite)
+
+You may:
+  - Use this Lite version for your own study and flashcards
+  - Edit the code and content for personal use
+  - Host a copy for yourself (for example on GitHub Pages)
+
+You may not:
+  - Remove or hide the footer credit link to cuoitudo.gumroad.com
+  - Resell, republish, or give away this app as a product or template
+  - Include it in another template pack or paid course as a bonus file
+
+This is a local web app, not a hosted service. Your data stays in your browser.
+The full Lumen Pro version (extra themes, unlimited decks and cards, heatmap, cram mode, and backup tools) is available at https://cuoitudo.gumroad.com
